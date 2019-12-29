@@ -1,5 +1,18 @@
-import { chordType, getScale, getKeySignature, modes } from '../helpers/shared';
+import { chordType, getScale, getKeySignature, modes, getKeySignatureSimple } from '../helpers/shared';
 import directAccessClient from '../db/util/directAccessClient';
+
+const naiveCheck = progression => {
+  let parsed = JSON.parse(progression);
+  if (!parsed || !parsed.length)
+    return false;
+  for(let i = 0; i < parsed.length; i++){
+    console.log(parsed[i]);
+    let { chord, length } = parsed[i];
+    if (!chord || !length || typeof chord !== 'string' || typeof length !== 'string' || chord === "" || length === "")
+      return false;
+  }
+  return true;
+};
 
 export default {
   getSongById: async ({ id, key, mode }) => {
@@ -17,6 +30,8 @@ export default {
       let { anchor, signature } = getKeySignature(data);
       data.keySignature = signature;
       data.anchor = anchor;
+    } else {
+      data.anchor = data.root;
     }
 
     let scale = getScale(data);
@@ -39,5 +54,32 @@ export default {
       return p
     })
     return data;
+  },
+
+  insertSong: async ({
+    title,
+    author,
+    keySignature,
+    timeSignature,
+    root,
+    mode,
+    progression
+  }) => {
+    if (!naiveCheck(progression)) {
+      return { success: false, message: 'Incorrect progression format'};
+    };
+    let insert = await directAccessClient(`
+      INSERT INTO songs (title, author, keySignature, timeSignature, root, mode, progression)
+      VALUES (?, ?, ?, ?, ?, ?, ?);
+    `, [title, author, keySignature, timeSignature, root, mode, progression]);
+
+    if (insert.insertId)
+      return { success: true }
+    else
+      return {
+        success: false,
+        message: insert.message
+      }
   }
 }
+
