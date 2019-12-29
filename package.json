@@ -9,7 +9,7 @@
     "dev": "nodemon --exec babel-node src/index.js",
     "clean": "rimraf dist",
     "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Matt McCarthy",
   "license": "MIT",
@@ -30,6 +30,7 @@
     "@babel/preset-env": "^7.7.7",
     "babel-eslint": "^8.0.3",
     "dotenv": "^4.0.0",
+    "jest": "^24.9.0",
     "nodemon": "^2.0.2"
   }
 }

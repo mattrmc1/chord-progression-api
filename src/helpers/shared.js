@@ -25,11 +25,23 @@ export const getKeySignatureSimple = ({ root, mode = "ionian" }) => {
   if (!circle.includes(root))
     throw new Error('Bad Key');
 
-  let index = circle.indexOf(root);
+  let modifier = modes[mode];
+  let index = circle.indexOf(root) + modifier;
   let sign = index > 7 ? '#' : 'b';
   let signature = `${sign}${index - 7}`;
-  console.log(index, sign, signature)
   return ({ root, signature });
+}
+
+export const getRelativeKeySignature = ({ targetRoot, targetMode, origRoot, origMode }) => {
+  if (!circle.includes(origRoot))
+    throw new Error('Bad Key');
+
+  let modifier = modes[targetMode];
+  let anchor = circle[modes[origMode] + modes[targetMode] + circle.indexOf(origRoot)];
+  let index = circle.indexOf(origRoot) + modifier;
+  let sign = index > 6 ? '#' : 'b';
+  let signature = `${sign}${index - 6}`;
+  return ({ anchor, signature });
 }
 
 export const getKeySignature = ({ root, mode, originalMode }) => {
