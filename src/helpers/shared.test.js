@@ -1,40 +1,50 @@
-import { getKeySignatureSimple, getRelativeKeySignature } from './shared';
+import { getKeySignatureSimple, getScale } from './shared';
+import { majorKeysTest, minorKeysTest, scalesTest, dorianModesTest, phrygianModesTest, lydianModesTest, mixolydianModesTest, locrianModesTest } from './testData';
 
-const signatures = [
-  {
-    description: 'G Major',
-    input: { root: 'G' },
-    output: { root: 'G', signature: '#1' }
-  },
-  {
-    description: 'D Major',
-    input: { root: 'D' },
-    output: { root: 'D', signature: '#2' }
-  },
-  {
-    description: 'A Major',
-    input: { root: 'A' },
-    output: { root: 'A', signature: '#3' }
-  },
-  {
-    description: 'F# Minor',
-    input: { root: 'F#', mode: 'minor' },
-    output: { root: 'F#', signature: '#3' }
-  },
-]
+describe('Key Signatures: Major', () => {
+  majorKeysTest.forEach( s => test('Simple Signature: ' + s.description, () => {
+    expect(getKeySignatureSimple(s.input)).toStrictEqual(s.output);
+  }));
+  test('Illegal Key Signatures', () => {
+    expect(() => getKeySignatureSimple({ root: "H" })).toThrow(new Error('Illegal note name'));
+    expect(() => getKeySignatureSimple({ root: "C", mode: "Bogus" })).toThrow(new Error('Illegal mode'));
+    expect(() => getKeySignatureSimple(null)).toThrow();
+  });
+});
 
-signatures.forEach( s => test('Simple Signature: ' + s.description, () => {
-  expect(getKeySignatureSimple(s.input)).toStrictEqual(s.output);
-}));
+describe.skip('Key Signatures: Minor', () => {
+  minorKeysTest.forEach( s => test('Minor Keys: ' + s.description, () => {
+    expect(getKeySignatureSimple(s.input)).toStrictEqual(s.output);
+  }));
+});
 
-// const relativeSignatures = [
-//   {
-//     description: 'Orig: G Major, New: A minor',
-//     input: { targetRoot: 'A', targetMode: 'minor', origRoot: 'G', origMode: 'major' },
-//     output: { anchor: 'C', signature: null }
-//   }
-// ]
+describe.skip('Key Signatures: Modes', () => {
+  dorianModesTest.forEach( s => test('Dorian Modes: ' + s.description, () => {
+    expect(getKeySignatureSimple(s.input)).toStrictEqual(s.output);
+  }));
+  phrygianModesTest.forEach( s => test('Phrygian Modes: ' + s.description, () => {
+    expect(getKeySignatureSimple(s.input)).toStrictEqual(s.output);
+  }));
+  lydianModesTest.forEach( s => test('Lydian Modes: ' + s.description, () => {
+    expect(getKeySignatureSimple(s.input)).toStrictEqual(s.output);
+  }));
+  mixolydianModesTest.forEach( s => test('Mixo Modes: ' + s.description, () => {
+    expect(getKeySignatureSimple(s.input)).toStrictEqual(s.output);
+  }));
+  locrianModesTest.forEach( s => test('Locrian Modes: ' + s.description, () => {
+    expect(getKeySignatureSimple(s.input)).toStrictEqual(s.output);
+  }));
+});
 
-// relativeSignatures.forEach( r => test('Relative Signature // ' + r.description, () => {
-//   expect(getRelativeKeySignature(r.input)).toStrictEqual(r.output);
-// }))
+describe('Scales', () => {
+  scalesTest.forEach( s => test('Scale: ' + s.description, () => {
+    expect(getScale(s.input)).toStrictEqual(s.output);
+  }));
+
+  test('Illegal Scales', () => {
+    expect(() => getScale({ root: "C", keySignature: "bogus" })).toThrow(new Error('Illegal key signature (Ex: "b3" or "#5")'));
+    expect(() => getScale({ root: "H", keySignature: "#1"} )).toThrow(new Error('Illegal note name'));
+    expect(() => getScale(null)).toThrow();
+    expect(() => getScale({ keySignature: "b3" })).toThrow();
+  });
+});

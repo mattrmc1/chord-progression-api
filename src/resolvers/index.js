@@ -6,7 +6,6 @@ const naiveCheck = progression => {
   if (!parsed || !parsed.length)
     return false;
   for(let i = 0; i < parsed.length; i++){
-    console.log(parsed[i]);
     let { chord, length } = parsed[i];
     if (!chord || !length || typeof chord !== 'string' || typeof length !== 'string' || chord === "" || length === "")
       return false;
