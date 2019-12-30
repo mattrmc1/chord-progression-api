@@ -620,6 +620,7 @@ export const locrianModesTest = [
 ];
 
 export const scalesTest = [
+  // E (all modes)
   { description: 'E Major',
     input: { root: 'E', keySignature: '#4' },
     output: ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#']
@@ -647,5 +648,126 @@ export const scalesTest = [
   { description: 'E Locrian',
     input: { root: 'E', keySignature: 'b1' },
     output: ['E', 'F', 'G', 'A', 'Bb', 'C', 'D']
+  },
+  // F (all modes)
+  { description: 'F Major',
+    input: { root: 'F', keySignature: 'b1' },
+    output: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E']
+  },
+  { description: 'F Minor',
+    input: { root: 'F', keySignature: 'b4' },
+    output: ['F', 'G', 'Ab', 'Bb', 'C', 'Db', 'Eb']
+  },
+  { description: 'F Dorian',
+    input: { root: 'F', keySignature: 'b3' },
+    output: ['F', 'G', 'Ab', 'Bb', 'C', 'D', 'Eb']
+  },
+  { description: 'F Phrygian',
+    input: { root: 'F', keySignature: 'b5' },
+    output: ['F', 'Gb', 'Ab', 'Bb', 'C', 'Db', 'Eb']
+  },
+  { description: 'F Lydian',
+    input: { root: 'F', keySignature: null },
+    output: ['F', 'G', 'A', 'B', 'C', 'D', 'E']
+  },
+  { description: 'F Mixolydian',
+    input: { root: 'F', keySignature: 'b2' },
+    output: ['F', 'G', 'A', 'Bb', 'C', 'D', 'Eb']
+  },
+  { description: 'F Locrian',
+    input: { root: 'F', keySignature: 'b6' },
+    output: ['F', 'Gb', 'Ab', 'Bb', 'Cb', 'Db', 'Eb']
+  },
+  // F# (all modes)
+  { description: 'F# Major',
+    input: { root: 'F#', keySignature: '#6' },
+    output: ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#']
+  },
+  { description: 'F# Minor',
+    input: { root: 'F#', keySignature: '#3' },
+    output: ['F#', 'G#', 'A', 'B', 'C#', 'D', 'E']
+  },
+  { description: 'F# Dorian',
+    input: { root: 'F#', keySignature: '#4' },
+    output: ['F#', 'G#', 'A', 'B', 'C#', 'D#', 'E']
+  },
+  { description: 'F# Phrygian',
+    input: { root: 'F#', keySignature: '#2' },
+    output: ['F#', 'G', 'A', 'B', 'C#', 'D', 'E']
+  },
+  { description: 'F# Lydian',
+    input: { root: 'F#', keySignature: '#7' },
+    output: ['F#', 'G#', 'A#', 'B#', 'C#', 'D#', 'E#']
+  },
+  { description: 'F# Mixolydian',
+    input: { root: 'F#', keySignature: '#5' },
+    output: ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E']
+  },
+  { description: 'F# Locrian',
+    input: { root: 'F#', keySignature: '#1' },
+    output: ['F#', 'G', 'A', 'B', 'C', 'D', 'E']
+  },
+  { description: 'Gb Major',
+    input: { root: 'Gb', keySignature: 'b6' },
+    output: ['Gb', 'Ab', 'Bb', 'Cb', 'Db', 'Eb', 'F']
+  },
+  // Gb (major modes only)
+  { description: 'Gb Lydian',
+    input: { root: 'Gb', keySignature: 'b5' },
+    output: ['Gb', 'Ab', 'Bb', 'C', 'Db', 'Eb', 'F']
+  },
+  { description: 'Gb Mixolydian',
+    input: { root: 'Gb', keySignature: 'b7' },
+    output: ['Gb', 'Ab', 'Bb', 'Cb', 'Db', 'Eb', 'Fb']
+  },
+  // G (all modes)
+  { description: 'G Major',
+    input: { root: 'G', keySignature: '#1' },
+    output: ['G', 'A', 'B', 'C', 'D', 'E', 'F#']
+  },
+  { description: 'G Minor',
+    input: { root: 'G', keySignature: 'b2' },
+    output: ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F']
+  },
+  { description: 'G Dorian',
+    input: { root: 'G', keySignature: 'b1' },
+    output: ['G', 'A', 'Bb', 'C', 'D', 'E', 'F']
+  },
+  { description: 'G Phrygian',
+    input: { root: 'G', keySignature: 'b3' },
+    output: ['G', 'Ab', 'Bb', 'C', 'D', 'Eb', 'F']
+  },
+  { description: 'G Lydian',
+    input: { root: 'G', keySignature: '#2' },
+    output: ['G', 'A', 'B', 'C#', 'D', 'E', 'F#']
+  },
+  { description: 'G Mixolydian',
+    input: { root: 'G', keySignature: null },
+    output: ['G', 'A', 'B', 'C', 'D', 'E', 'F']
+  },
+  { description: 'G Locrian',
+    input: { root: 'G', keySignature: 'b4' },
+    output: ['G', 'Ab', 'Bb', 'C', 'Db', 'Eb', 'F']
+  },
+  // G# (mix)
+  { description: 'G# Minor',
+    input: { root: 'G#', keySignature: '#5' },
+    output: ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F#']
+  },
+  { description: 'G# Dorian',
+    input: { root: 'G#', keySignature: '#6' },
+    output: ['G#', 'A#', 'B', 'C#', 'D#', 'E#', 'F#']
+  },
+  { description: 'G# Phrygian',
+    input: { root: 'G#', keySignature: '#4' },
+    output: ['G#', 'A', 'B', 'C#', 'D#', 'E', 'F#']
+  },
+  { description: 'G# Mixolydian',
+    input: { root: 'G#', keySignature: '#7' },
+    output: ['G#', 'A#', 'B#', 'C#', 'D#', 'E#', 'F#']
+  },
+  { description: 'G# Locrian',
+    input: { root: 'G#', keySignature: '#3' },
+    output: ['G#', 'A', 'B', 'C#', 'D', 'E', 'F#']
   }
 ]
