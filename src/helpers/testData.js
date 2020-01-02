@@ -769,6 +769,19 @@ export const locrianModesTest = [
   }
 ];
 
+export const enharmonicCorrectionsTest = [
+  {
+    description: 'G# lydian -> Ab lydian',
+    input: { root: 'G#', mode: 'lydian' },
+    output: { root: 'Ab', signature: 'b3' }
+  },
+  {
+    description: 'Ab phrygian -> G# phrygian',
+    input: { root: 'Ab', mode: 'phrygian' },
+    output: { root: 'G#', signature: '#4' }
+  },
+]
+
 export const scalesTest = [
   // E (all modes)
   {

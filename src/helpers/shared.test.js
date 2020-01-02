@@ -1,5 +1,15 @@
 import { getKeySignature, getScale } from './shared';
-import { majorKeysTest, minorKeysTest, scalesTest, dorianModesTest, phrygianModesTest, lydianModesTest, mixolydianModesTest, locrianModesTest, errorScalesTest } from './testData';
+import {
+  majorKeysTest,
+  minorKeysTest,
+  scalesTest,
+  dorianModesTest,
+  phrygianModesTest,
+  lydianModesTest,
+  mixolydianModesTest,
+  locrianModesTest,
+  enharmonicCorrectionsTest
+ } from './testData';
 
 describe('Key Signatures: Major', () => {
   majorKeysTest.forEach( s => test('Simple Signature: ' + s.description, () => {
@@ -28,12 +38,15 @@ describe('Key Signatures: Modes', () => {
   lydianModesTest.forEach( s => test('Lydian Modes: ' + s.description, () => {
     expect(getKeySignature(s.input)).toStrictEqual(s.output);
   }));
-  mixolydianModesTest.forEach( s => test('Mixo Modes: ' + s.description, () => {
+  mixolydianModesTest.forEach( s => test('Mixolydian Modes: ' + s.description, () => {
     expect(getKeySignature(s.input)).toStrictEqual(s.output);
   }));
   locrianModesTest.forEach( s => test('Locrian Modes: ' + s.description, () => {
     expect(getKeySignature(s.input)).toStrictEqual(s.output);
   }));
+  enharmonicCorrectionsTest.forEach( s => test('Enharmonic Mode Changes: ' + s.description, () => {
+    expect(getKeySignature(s.input)).toStrictEqual(s.output);
+  }))
 });
 
 describe('Scales', () => {

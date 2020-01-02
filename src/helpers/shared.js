@@ -33,7 +33,9 @@ const notes = {
   'B': 11,
   'Cb': 11,
   'B#': 0
-}
+};
+
+const swapEnharmonicValues = note => Object.keys(notes).find(key => notes[key] === notes[note] && key !== note);
 
 const getMajorScale = root => {
   if (!circle.includes(root))
@@ -43,7 +45,7 @@ const getMajorScale = root => {
   let index = circle.indexOf(root);
   let sign = index > 7 ? '#' : 'b';
   return `${sign}${Math.abs(index - 7)}`;
-}
+};
 
 const modes = {
   locrian: root => {
@@ -87,16 +89,17 @@ export const getKeySignature = ({ root, mode = 'ionian' }) => {
   if (!Object.keys(modes).includes(mode))
     throw new Error('Illegal mode');
   
-  let signature = modes[mode](root);
+  let signature = null;
+  try {
+    signature = modes[mode](root);
+  } catch {
+    root = swapEnharmonicValues(root);
+    signature = modes[mode](root);
+  }
   return { root, signature };
 }
 
 // Refactor:
-//
-// getKeySignature: takes in root note & mode, returns string (enum) of keySignature
-// example: ({ root = "G", mode = "major" }) => "#1"
-// TODO: Change circle to utilize numbers (1-12) so enharmonic values don't clash (i.e. G#/Ab)
-// TODO: Map weird input for accepted keys (G# lydian => Ab lydian || Ab phrygian => G# phrygian)
 //
 // getRelative: takes in { original root/mode } and { target root/mode }, returns { relative anchor/mode/signature } to match original MODE
 // example: ({ origRoot = "G", origMode = "major" }, { targetRoot = "A", targetMode = "minor" }) => { anchor: "C", mode: "major", signature: null }
