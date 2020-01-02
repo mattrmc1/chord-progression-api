@@ -1,4 +1,4 @@
-import { chordType, getScale, getKeySignature, modes, getKeySignatureSimple } from '../helpers/shared';
+import { getRelative, mapProgression } from '../helpers/shared';
 import directAccessClient from '../db/util/directAccessClient';
 
 const naiveCheck = progression => {
@@ -24,34 +24,12 @@ export default {
     data['originalMode'] = data.mode;
     
     if (key) {
-      data.root = key;
-      data.mode = mode && modes[mode.toLowerCase()] ? mode.toLowerCase() : data.mode;
-      let { anchor, signature } = getKeySignature(data);
+      let target = { root: key, mode };
+      let { root, signature } = getRelative(data, target);
+      data.root = root;
       data.keySignature = signature;
-      data.anchor = anchor;
-    } else {
-      data.anchor = data.root;
     }
-
-    let scale = getScale(data);
-  
-    data.progression.map(p => {
-      let chordElements = p.chord.split('');
-      let letter = scale[parseInt(chordElements[0]) - 1];
-      let quality = chordType[chordElements[1]];
-      let suffix = '';
-  
-      if (chordElements.includes('/')){
-        let target = scale[parseInt(chordElements[chordElements.indexOf('/') + 1]) - 1];
-        letter = scale[(scale.indexOf(target) + parseInt(chordElements[0])) % 8];
-        suffix = [...chordElements].slice(2, chordElements.indexOf('/')).join('');
-      } else {
-        suffix = chordElements[1] === 'h' ? '' : [...chordElements].slice(2).join('');
-      }
-  
-      p.chord = letter + quality + suffix;
-      return p
-    })
+    data.progression = mapProgression(data);
     return data;
   },
 

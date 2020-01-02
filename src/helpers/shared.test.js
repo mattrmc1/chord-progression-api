@@ -17,8 +17,8 @@ describe('Key Signatures: Major', () => {
     expect(getKeySignature(s.input)).toStrictEqual(s.output);
   }));
   test('Illegal Key Signatures', () => {
-    expect(() => getKeySignature({ root: "H" })).toThrow(new Error('Illegal note name'));
-    expect(() => getKeySignature({ root: "C", mode: "Bogus" })).toThrow(new Error('Illegal mode'));
+    expect(() => getKeySignature({ root: "H" })).toThrow(new Error('Illegal note name: H'));
+    expect(() => getKeySignature({ root: "C", mode: "Bogus" })).toThrow(new Error('Illegal mode: Bogus'));
     expect(() => getKeySignature(null)).toThrow();
   });
 });
@@ -48,13 +48,6 @@ describe('Key Signatures: Modes', () => {
   enharmonicCorrectionsTest.forEach( s => test('Enharmonic Mode Changes: ' + s.description, () => {
     expect(getKeySignature(s.input)).toStrictEqual(s.output);
   }))
-  test.only('whatev', () => {
-    getRelative({ root: "G", mode: "lydian" }, { root: "Eb", mode: "major" });
-    getRelative({ root: "F", mode: "major" }, { root: "Bb", mode: "major" });
-    getRelative({ root: "G", mode: "minor" }, { root: "Eb", mode: "major" });
-    getRelative({ root: "D", mode: "dorian" }, { root: "D", mode: "major" });
-    expect(true).toBe(true);
-  })
 });
 
 describe('Scales', () => {

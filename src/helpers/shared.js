@@ -33,7 +33,7 @@ const notes = {
   'Cb': 11,
   'B#': 0
 };
-const modes = {
+export const modes = {
   locrian: root => {
     let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + 1) % letters.length];
     let relativeMajor = Object.keys(notes).find(key => key.includes(targetLetter) && notes[key] === (notes[root] + 1) % 12);
@@ -97,7 +97,7 @@ export const getKeySignature = ({ root, mode = 'ionian' }) => {
   return { root, signature };
 }
 
-export const getRelative = (original, target) => {
+export const getRelative = ({ mode }, target) => {
   let modeMap = {
     lydian: 0,
     ionian: 1,
@@ -109,15 +109,12 @@ export const getRelative = (original, target) => {
     phrygian: 5,
     locrian: 6
   };
-  let x = modeMap[target.mode] - modeMap[original.mode];
+  let x = modeMap[target.mode] - modeMap[mode];
   let multiplier = x < 0 ? 7 : 5;
   x = Math.abs(x);
-  let anchor = Object.keys(notes).find(key => notes[key] === (notes[target.root] + x * multiplier) % 12);
+  let root = Object.keys(notes).find(key => notes[key] === (notes[target.root] + x * multiplier) % 12);
 
-  let { root, signature } = getKeySignature({ root: anchor, mode: original.mode });
-  let mode = original.mode;
-
-  return { root, mode, signature };
+  return getKeySignature({ root, mode });
 }
 
 export const getScale = ({ root, keySignature }) => {
@@ -137,3 +134,25 @@ export const getScale = ({ root, keySignature }) => {
   let notes = letters.map(l => accidentals.includes(l) ? l + keySignature[0] : l);
   return [...notes.slice(letters.indexOf(root)), ...notes.slice(0, letters.indexOf(root))]
 };
+
+export const mapProgression = ({ root, keySignature, progression }) => {
+  let scale = getScale({root, keySignature});
+
+  return progression.map(p => {
+    let chordElements = p.chord.split('');
+    let letter = scale[parseInt(chordElements[0]) - 1];
+    let quality = chordType[chordElements[1]];
+    let suffix = '';
+
+    if (chordElements.includes('/')){
+      let target = scale[parseInt(chordElements[chordElements.indexOf('/') + 1]) - 1];
+      letter = scale[(scale.indexOf(target) + parseInt(chordElements[0])) % 8];
+      suffix = [...chordElements].slice(2, chordElements.indexOf('/')).join('');
+    } else {
+      suffix = chordElements[1] === 'h' ? '' : [...chordElements].slice(2).join('');
+    }
+
+    p.chord = letter + quality + suffix;
+    return p
+  })
+}
