@@ -1,16 +1,14 @@
-import { getKeySignature, getScale, getRelative } from './shared';
+import getKeySignature from '../getKeySignature';
 import {
   majorKeysTest,
   minorKeysTest,
-  scalesTest,
   dorianModesTest,
   phrygianModesTest,
   lydianModesTest,
   mixolydianModesTest,
   locrianModesTest,
-  enharmonicCorrectionsTest,
-  relativeModes
- } from './testData';
+  enharmonicCorrectionsTest
+ } from './getKeySignature.data';
 
 describe('Key Signatures: Major', () => {
   majorKeysTest.forEach( s => test('Simple Signature: ' + s.description, () => {
@@ -49,21 +47,3 @@ describe('Key Signatures: Modes', () => {
     expect(getKeySignature(s.input)).toStrictEqual(s.output);
   }))
 });
-
-describe('Scales', () => {
-  scalesTest.forEach( s => test('Scale: ' + s.description, () => {
-    expect(getScale(s.input)).toStrictEqual(s.output);
-  }));
-
-  test('Illegal Scales', () => {
-    expect(() => getScale({ root: "C", keySignature: "bogus" })).toThrow(new Error('Illegal key signature: bogus'));
-    expect(() => getScale({ root: "Gb", keySignature: "b9" })).toThrow(new Error('Illegal key signature: b9'));
-    expect(() => getScale({ root: "H", keySignature: "#1"} )).toThrow(new Error('Illegal note name: H'));
-    expect(() => getScale({ keySignature: "b3" })).toThrow(new Error('Note name can not be null'));
-    expect(() => getScale(null)).toThrow();
-  });
-});
-
-describe('Relative Modes', () => {
-  relativeModes.forEach(m => test(m.description, () => expect(getRelative(...m.input)).toStrictEqual(m.output) ));
-})

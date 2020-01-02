@@ -1,4 +1,5 @@
-import { getRelative, mapProgression } from '../helpers/shared';
+import mapProgression from '../helpers/mapProgression';
+import getRelative from '../helpers/getRelative';
 import directAccessClient from '../db/util/directAccessClient';
 
 const naiveCheck = progression => {
