@@ -1,4 +1,4 @@
-import { getKeySignature, getScale } from './shared';
+import { getKeySignature, getScale, getRelative } from './shared';
 import {
   majorKeysTest,
   minorKeysTest,
@@ -8,7 +8,8 @@ import {
   lydianModesTest,
   mixolydianModesTest,
   locrianModesTest,
-  enharmonicCorrectionsTest
+  enharmonicCorrectionsTest,
+  relativeModes
  } from './testData';
 
 describe('Key Signatures: Major', () => {
@@ -47,6 +48,13 @@ describe('Key Signatures: Modes', () => {
   enharmonicCorrectionsTest.forEach( s => test('Enharmonic Mode Changes: ' + s.description, () => {
     expect(getKeySignature(s.input)).toStrictEqual(s.output);
   }))
+  test.only('whatev', () => {
+    getRelative({ root: "G", mode: "lydian" }, { root: "Eb", mode: "major" });
+    getRelative({ root: "F", mode: "major" }, { root: "Bb", mode: "major" });
+    getRelative({ root: "G", mode: "minor" }, { root: "Eb", mode: "major" });
+    getRelative({ root: "D", mode: "dorian" }, { root: "D", mode: "major" });
+    expect(true).toBe(true);
+  })
 });
 
 describe('Scales', () => {
@@ -62,3 +70,7 @@ describe('Scales', () => {
     expect(() => getScale(null)).toThrow();
   });
 });
+
+describe('Relative Modes', () => {
+  relativeModes.forEach(m => test(m.description, () => expect(getRelative(...m.input)).toStrictEqual(m.output) ));
+})

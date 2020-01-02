@@ -10,7 +10,6 @@ const legalSignatures = ['#1','#2','#3','#4','#5','#6','#7','b1','b2','b3','b4',
 const letters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ];
 const fifths = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
 const circle = ['Cb', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F', 'C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#'];
-
 const notes = {
   'C': 0,
   'C#': 1,
@@ -34,19 +33,6 @@ const notes = {
   'Cb': 11,
   'B#': 0
 };
-
-const swapEnharmonicValues = note => Object.keys(notes).find(key => notes[key] === notes[note] && key !== note);
-
-const getMajorScale = root => {
-  if (!circle.includes(root))
-    throw new Error(root);
-  if (root === 'C')
-    return null;
-  let index = circle.indexOf(root);
-  let sign = index > 7 ? '#' : 'b';
-  return `${sign}${Math.abs(index - 7)}`;
-};
-
 const modes = {
   locrian: root => {
     let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + 1) % letters.length];
@@ -83,11 +69,23 @@ const modes = {
   ionian: root => getMajorScale(root)
 }
 
+const swapEnharmonicValues = note => Object.keys(notes).find(key => notes[key] === notes[note] && key !== note);
+
+const getMajorScale = root => {
+  if (!circle.includes(root))
+    throw new Error(root);
+  if (root === 'C')
+    return null;
+  let index = circle.indexOf(root);
+  let sign = index > 7 ? '#' : 'b';
+  return `${sign}${Math.abs(index - 7)}`;
+};
+
 export const getKeySignature = ({ root, mode = 'ionian' }) => {
   if (!Object.keys(notes).includes(root) && !circle.includes(root))
-    throw new Error('Illegal note name');
+    throw new Error(`Illegal note name: ${root}`);
   if (!Object.keys(modes).includes(mode))
-    throw new Error('Illegal mode');
+    throw new Error(`Illegal mode: ${mode}`);
   
   let signature = null;
   try {
@@ -99,19 +97,28 @@ export const getKeySignature = ({ root, mode = 'ionian' }) => {
   return { root, signature };
 }
 
-// Refactor:
-//
-// getRelative: takes in { original root/mode } and { target root/mode }, returns { relative anchor/mode/signature } to match original MODE
-// example: ({ origRoot = "G", origMode = "major" }, { targetRoot = "A", targetMode = "minor" }) => { anchor: "C", mode: "major", signature: null }
-// example: ({ origRoot = "F", origMode = "major" }, { targetRoot = "Bb", targetMode = "major" }) => { anchor: "Bb", mode: "major", signature: "b2" }
-// example: ({ origRoot = "G", origMode = "minor" }, { targetRoot = "Eb", targetMode = "major" }) => { anchor: "C", mode: "minor", signature: "b3" }
-// example: ({ origRoot = "D", origMode = "dorian" }, { targetRoot = "D", targetMode = "major" }) => { anchor: "E", mode: "dorian", signature: "#2" }
-//
-// [Don't make this] getParallel: takes in { original root/mode } and { target root/mode }, returns { parallel anchor/mode/signature } to match original ROOT
-// Reminder: Just use getKeySignature of new key for this functionality
-//
-// getScale: takes in { root and keySignature }, returns array of note names with correct accidentals in proper order
-// example: ({ root = "A", keySignature = "#3" }) => ["A", "B", "C#", "D", "E", "F#", "G#"]
+export const getRelative = (original, target) => {
+  let modeMap = {
+    lydian: 0,
+    ionian: 1,
+    major: 1,
+    mixolydian: 2,
+    dorian: 3,
+    aeolian: 4,
+    minor: 4,
+    phrygian: 5,
+    locrian: 6
+  };
+  let x = modeMap[target.mode] - modeMap[original.mode];
+  let multiplier = x < 0 ? 7 : 5;
+  x = Math.abs(x);
+  let anchor = Object.keys(notes).find(key => notes[key] === (notes[target.root] + x * multiplier) % 12);
+
+  let { root, signature } = getKeySignature({ root: anchor, mode: original.mode });
+  let mode = original.mode;
+
+  return { root, mode, signature };
+}
 
 export const getScale = ({ root, keySignature }) => {
   if (!root)
