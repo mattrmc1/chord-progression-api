@@ -9,7 +9,7 @@ import SongType from '../types/SongType';
 import InsertResponseType from '../types/InsertResponseType';
 import resolvers from '../resolvers';
 
-const queries = new GraphQLObjectType({
+const query = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     song: {
@@ -24,7 +24,7 @@ const queries = new GraphQLObjectType({
   })
 });
 
-const mutations = new GraphQLObjectType({
+const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
     insertSong: {
@@ -43,7 +43,4 @@ const mutations = new GraphQLObjectType({
   })
 });
 
-export default new GraphQLSchema({
-  query: queries,
-  mutation: mutations
-})
+export default new GraphQLSchema({ query, mutation })

@@ -31,48 +31,42 @@ export const notePositions = {
   'B#': 0
 };
 
+const modesToMajorMap = {
+  locrian: { l: 1, p: 1 },
+  aeolian: { l: 2, p: 3 },
+  mixolydian: { l: 3, p: 5 },
+  lydian: { l: 4, p: 7 },
+  phrygian: { l: 5, p: 8 },
+  dorian: { l: 6, p: 10 },
+  minor: { l: 2, p: 3 }
+}
+
+export const getRelativeMajor = (root, mode = "minor") => {
+  if (!modesToMajorMap[mode])
+    throw new Error(`Unable to get relative major of unrecognized mode: ${mode}`);
+  let { l, p } = modesToMajorMap[mode];
+  let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + l) % letters.length];
+  return Object.keys(notePositions).find(key => key.includes(targetLetter) && notePositions[key] === (notePositions[root] + p) % 12);
+}
+
 export const modes = {
-  locrian: root => {
-    let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + 1) % letters.length];
-    let relativeMajor = Object.keys(notePositions).find(key => key.includes(targetLetter) && notePositions[key] === (notePositions[root] + 1) % 12);
-    return getMajorScale(relativeMajor);
-  },
-  aeolian: root => {
-    let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + 2) % letters.length];
-    let relativeMajor = Object.keys(notePositions).find(key => key.includes(targetLetter) && notePositions[key] === (notePositions[root] + 3) % 12);
-    return getMajorScale(relativeMajor);
-  },
-  mixolydian: root => {
-    let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + 3) % letters.length];
-    let relativeMajor = Object.keys(notePositions).find(key => key.includes(targetLetter) && notePositions[key] === (notePositions[root] + 5) % 12);
-    return getMajorScale(relativeMajor);
-  },
-  lydian: root => {
-    let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + 4) % letters.length];
-    let relativeMajor = Object.keys(notePositions).find(key => key.includes(targetLetter) && notePositions[key] === (notePositions[root] + 7) % 12);
-    return getMajorScale(relativeMajor);
-  },
-  phrygian: root => {
-    let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + 5) % letters.length];
-    let relativeMajor = Object.keys(notePositions).find(key => key.includes(targetLetter) && notePositions[key] === (notePositions[root] + 8) % 12);
-    return getMajorScale(relativeMajor);
-  },
-  dorian: root => {
-    let targetLetter = letters[(letters.indexOf(root.substring(0,1)) + 6) % letters.length];
-    let relativeMajor = Object.keys(notePositions).find(key => key.includes(targetLetter) && notePositions[key] === (notePositions[root] + 10) % 12);
-    return getMajorScale(relativeMajor);
-  },
-  minor: root => modes.aeolian(root),
-  major: root => getMajorScale(root),
-  ionian: root => getMajorScale(root)
+  locrian: root => getMajorKey(getRelativeMajor(root, 'locrian')),
+  aeolian: root => getMajorKey(getRelativeMajor(root, 'aeolian')),
+  mixolydian: root => getMajorKey(getRelativeMajor(root, 'mixolydian')),
+  lydian: root => getMajorKey(getRelativeMajor(root, 'lydian')),
+  phrygian: root => getMajorKey(getRelativeMajor(root, 'phrygian')),
+  dorian: root => getMajorKey(getRelativeMajor(root, 'dorian')),
+  minor: root => getMajorKey(getRelativeMajor(root)),
+  major: root => getMajorKey(root),
+  ionian: root => getMajorKey(root)
 }
 
 export const swapEnharmonicValues = note => Object.keys(notePositions).find(key => notePositions[key] === notePositions[note] && key !== note);
 
-export const getMajorScale = root => {
+export const getMajorKey = root => {
   let circle = ['Cb', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F', 'C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#'];
   if (!circle.includes(root))
-    throw new Error(root);
+    throw new Error(`Invalid Major Root: ${root}`);
   if (root === 'C')
     return null;
   let index = circle.indexOf(root);

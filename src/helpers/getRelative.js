@@ -3,14 +3,14 @@ import getKeySignature from './getKeySignature';
 
 const modeMap = {
   lydian: 0,
-    ionian: 1,
-    major: 1,
-    mixolydian: 2,
-    dorian: 3,
-    aeolian: 4,
-    minor: 4,
-    phrygian: 5,
-    locrian: 6
+  ionian: 1,
+  major: 1,
+  mixolydian: 2,
+  dorian: 3,
+  aeolian: 4,
+  minor: 4,
+  phrygian: 5,
+  locrian: 6
 };
 
 export default ({ mode }, target) => {
