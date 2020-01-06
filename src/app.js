@@ -1,21 +1,20 @@
 import express from 'express';
-import expressGraphQL from 'express-graphql';
-import { graphql } from 'graphql';
-import schema from './graphql/schema';
+import gqlInit from './graphql/init';
+import path from 'path';
+import bodyParser from 'body-parser';
+import cors from "cors";
+import routes from './routes';
 
 const app = express();
+app.disable('x-powered-by');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('/', (req,res) => res.json('Yaoo'));
+app.use(cors());
 
-app.use('/graphql', expressGraphQL({
-  schema: schema,
-  graphiql: true
-}))
+app.use('/', routes);
 
-app.post('/gql', (req, res) => {
-  graphql(schema, req.body.query, null, null, req.body.variables )
-    .then(data => res.json(data))
-    .catch(err => res.json(err))
-})
+gqlInit(app)
 
 export default app;

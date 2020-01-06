@@ -73,3 +73,17 @@ export const getMajorKey = root => {
   let sign = index > 7 ? '#' : 'b';
   return `${sign}${Math.abs(index - 7)}`;
 };
+
+export const parseAccidentals = key => {
+  if (!key || key.slice(1) === '')
+    return key;
+  
+  let accidentalMap = {
+    sharp: '#',
+    flat: 'b',
+    s: '#',
+    f: 'b'
+  };
+
+  return key[0] + accidentalMap[key.slice(1)];
+}

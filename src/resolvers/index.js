@@ -15,7 +15,9 @@ const naiveCheck = progression => {
 };
 
 export default {
-  getSongById: async ({ id, key, mode }) => {
+  getSongById: async ({ id, key, mode }, { sort = 'title', direction = 'asc' }) => {
+    // TODO: implement sort and direction
+    console.log(sort, direction)
     let data = await directAccessClient(`
       SELECT * FROM songs WHERE id = ?
     `, [id]);
@@ -25,6 +27,7 @@ export default {
     data['originalMode'] = data.mode;
     
     if (key) {
+      mode = mode ? mode : data.mode;
       let target = { root: key, mode };
       let { root, signature } = getRelative(data, target);
       data.root = root;
@@ -32,6 +35,21 @@ export default {
     }
     data.progression = mapProgression(data);
     return data;
+  },
+
+  getSongs: async root => {
+    // TODO: Handle query direct from GQL that doesn't send req.query
+    if (!root || !root.req || !root.req.query) {
+      return await directAccessClient(`
+        SELECT * FROM songs
+      `)
+    }
+    let { search } = root.req.query
+    let author = `%${search}%`;
+    // TODO: implmenet key, sort, and direction
+    return await directAccessClient(`
+      SELECT * FROM songs WHERE title SOUNDS LIKE ? OR author LIKE ?
+    `, [search, author]);
   },
 
   insertSong: async ({
