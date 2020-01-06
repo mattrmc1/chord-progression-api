@@ -75,15 +75,14 @@ export const getMajorKey = root => {
 };
 
 export const parseAccidentals = key => {
-  if (!key || key.slice(1) === '')
-    return key;
-  
   let accidentalMap = {
     sharp: '#',
     flat: 'b',
     s: '#',
     f: 'b'
   };
+  if (!key || key.slice(1) === '' || Object.values(accidentalMap).includes(key.slice(1)) )
+    return key;
 
   return key[0] + accidentalMap[key.slice(1)];
 }

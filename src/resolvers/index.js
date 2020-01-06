@@ -2,6 +2,8 @@ import mapProgression from '../helpers/mapProgression';
 import getRelative from '../helpers/getRelative';
 import directAccessClient from '../db/util/directAccessClient';
 
+// TODO: Break up this file into smaller files
+
 const naiveCheck = progression => {
   let parsed = JSON.parse(progression);
   if (!parsed || !parsed.length)
@@ -17,7 +19,6 @@ const naiveCheck = progression => {
 export default {
   getSongById: async ({ id, key, mode }, { sort = 'title', direction = 'asc' }) => {
     // TODO: implement sort and direction
-    console.log(sort, direction)
     let data = await directAccessClient(`
       SELECT * FROM songs WHERE id = ?
     `, [id]);

@@ -2,8 +2,8 @@ import { GraphQLInt, GraphQLString } from 'graphql';
 import SongType from '../types/SongType';
 
 let gql = `
-  query getSongById( $id: Int!, $key: String, $mode: String ) {
-    getSongById( id: $id, key: $key, mode: $mode ){
+  query songById( $id: Int!, $key: String, $mode: String ) {
+    songById( id: $id, key: $key, mode: $mode ){
       title
       root
       progression {
@@ -14,8 +14,8 @@ let gql = `
   }
 `;
 
-export default resolvers => ({
-  getSongById: {
+export default ({ getSongById }) => ({
+  songById: {
     type: SongType,
     endpoint: '/songs/:id/:key?/:mode?',
     args: {
@@ -31,6 +31,6 @@ export default resolvers => ({
         mode: req.params.mode
       }
     }),
-    resolve: (root, params) => resolvers.getSongById(params, root)
+    resolve: (root, params) => getSongById(params, root)
   }
 });

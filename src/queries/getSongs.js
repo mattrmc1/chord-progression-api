@@ -2,8 +2,8 @@ import { GraphQLList } from 'graphql';
 import SongType from '../types/SongType';
 
 let gql = `
-  query getSongs {
-    getSongs {
+  query songs {
+    songs {
       title
       author
       keySignature
@@ -14,14 +14,14 @@ let gql = `
   }
 `;
 
-export default resolvers => ({
-  getSongs: {
+export default ({ getSongs }) => ({
+  songs: {
     type: GraphQLList(SongType),
     endpoint: '/songs',
     handleParams: req => ({
       query: gql,
       variables: {}
     }),
-    resolve: root => resolvers.getSongs(root)
+    resolve: root => getSongs(root)
   }
 });

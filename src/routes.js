@@ -7,5 +7,6 @@ const router = Router();
 router.get('/', (req, res) => res.json({ message: "Yaoo"}));
 
 queryRoutes(router, schema);
+// TODO: mutationRoutes
 
 export default router;

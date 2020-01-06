@@ -9,7 +9,7 @@ export const query = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     ...getSongById(resolvers),
-    ...getSongs(resolvers),
+    ...getSongs(resolvers)
   })
 });
 
