@@ -1,25 +1,30 @@
-import { GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLObjectType, graphql } from 'graphql';
 
-import InsertResponseType from '../types/InsertResponseType';
 import resolvers from '../resolvers';
+import insertSong from '../mutations/insertSong';
 
 export const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    insertSong: {
-      type: InsertResponseType,
-      args: {
-        title: { type: GraphQLString },
-        author: { type: GraphQLString },
-        keySignature: { type: GraphQLString },
-        timeSignature: { type: GraphQLString },
-        root: { type: GraphQLString },
-        mode: { type: GraphQLString },
-        progression: { type: GraphQLString }
-      },
-      resolve: (root, params) => resolvers.insertSong(params, root)
-    }
+    ...insertSong(resolvers)
   })
 });
 
-// TODO: mutationRoutes
+export const mutationRoutes = (router, schema) => {
+  let fields = mutation.getFields();
+  
+  Object.keys(fields).forEach(key => {
+    let item = fields[key];
+
+    router.post(item.endpoint, async (req, res) => {
+      // Needs tests - bet I could break this
+      let input = item.handleParams(req);
+
+      return graphql(schema, input.query, { req }, null, input.variables)
+        .then(data => res.json({
+          ...data.data,
+          errors: data.errors
+        }));
+    })
+  });
+};

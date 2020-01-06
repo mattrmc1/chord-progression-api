@@ -4,18 +4,6 @@ import directAccessClient from '../db/util/directAccessClient';
 
 // TODO: Break up this file into smaller files
 
-const naiveCheck = progression => {
-  let parsed = JSON.parse(progression);
-  if (!parsed || !parsed.length)
-    return false;
-  for(let i = 0; i < parsed.length; i++){
-    let { chord, length } = parsed[i];
-    if (!chord || !length || typeof chord !== 'string' || typeof length !== 'string' || chord === "" || length === "")
-      return false;
-  }
-  return true;
-};
-
 export default {
   getSongById: async ({ id, key, mode }, { sort = 'title', direction = 'asc' }) => {
     // TODO: implement sort and direction
@@ -53,22 +41,21 @@ export default {
     `, [search, author]);
   },
 
-  insertSong: async ({
-    title,
-    author,
-    keySignature,
-    timeSignature,
-    root,
-    mode,
-    progression
-  }) => {
-    if (!naiveCheck(progression)) {
-      return { success: false, message: 'Incorrect progression format'};
-    };
+  insertSong: async ({ input }) => {
+    let {
+      title,
+      author,
+      keySignature,
+      timeSignature,
+      root,
+      mode,
+      progression
+    } = input;
+    let prog = JSON.stringify(progression);
     let insert = await directAccessClient(`
       INSERT INTO songs (title, author, keySignature, timeSignature, root, mode, progression)
       VALUES (?, ?, ?, ?, ?, ?, ?);
-    `, [title, author, keySignature, timeSignature, root, mode, progression]);
+    `, [title, author, keySignature, timeSignature, root, mode, prog]);
 
     if (insert.insertId)
       return { success: true }

@@ -1,10 +1,11 @@
 import {
+  GraphQLInputObjectType,
   GraphQLObjectType,
   GraphQLString,
   GraphQLList
 } from 'graphql';
 
-export default new GraphQLObjectType({
+export const ProgressionType = new GraphQLObjectType({
   name: 'ProgressionType',
   fields: () => ({
     chord: { type: GraphQLString },
@@ -12,3 +13,13 @@ export default new GraphQLObjectType({
     melody: { type: new GraphQLList(GraphQLString) }
   })
 });
+
+export const ProgressionInputType =  new GraphQLInputObjectType({
+  name: 'ProgressionInputType',
+  fields: () => ({
+    chord: { type: GraphQLString },
+    length: { type: GraphQLString }
+  })
+});
+
+export default ProgressionType;

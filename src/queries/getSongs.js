@@ -17,6 +17,7 @@ let gql = `
 export default ({ getSongs }) => ({
   songs: {
     type: GraphQLList(SongType),
+    method: 'get',
     endpoint: '/songs',
     handleParams: req => ({
       query: gql,

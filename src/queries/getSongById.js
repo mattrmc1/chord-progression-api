@@ -17,6 +17,7 @@ let gql = `
 export default ({ getSongById }) => ({
   songById: {
     type: SongType,
+    method: 'get',
     endpoint: '/songs/:id/:key?/:mode?',
     args: {
       id: { type: GraphQLInt },
