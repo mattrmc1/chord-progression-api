@@ -4,6 +4,7 @@ import SongType from '../types/SongType';
 let gql = `
   query songs {
     songs {
+      id
       title
       author
       keySignature

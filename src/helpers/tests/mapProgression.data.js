@@ -321,7 +321,7 @@ export const progressions = [
         "length": "1W"
       },
       {
-        "chord": "GMaj6",
+        "chord": "G6",
         "length": "1W"
       },
       {
@@ -329,7 +329,7 @@ export const progressions = [
         "length": "1W"
       },
       {
-        "chord": "GMaj6",
+        "chord": "G6",
         "length": "1W"
       },
       {

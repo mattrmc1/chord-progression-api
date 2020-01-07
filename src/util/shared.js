@@ -1,10 +1,48 @@
+import getScale from "../helpers/getScale";
+
 export const chordType = {
   "-": "min",
-  "j": "Maj",
-  "h": "-7(b5)",
-  "f": "dim",
-  "d": ""
+  "-7": "min7",
+  "j": "",
+  "j6": "6",
+  "j7": "Maj7",
+  "h7": "-7(b5)",
+  "f7": "dim7",
+  "d7": "7"
 };
+export const parseChord = (chord, scale) => {
+  let elements = chord.split('');
+
+  if (elements.includes('/')) {
+    let split = chord.split('/');
+    let right = split[1];
+    let left = split[0];
+
+    let targetChord = ['b', '#'].includes(right[0])
+      ? handleAccidentalChord(right[0], scale[parseInt(right[1]) - 1])
+      : scale[parseInt(right[0]) - 1];
+    let targetScale = getScale({ root: targetChord, keySignature: getMajorKey(targetChord) });
+
+    return parseChord(left, targetScale);
+  }
+
+  let accidental = ['b', '#'].includes(elements[0]) ? elements[0] : '';
+  let displacement = accidental === '' ? 0 : 1;
+  let letter = handleAccidentalChord(accidental, scale[parseInt(elements[0 + displacement]) - 1]);
+  let quality = chordType[elements.slice(1 + displacement).join('')];
+  return letter + quality;
+}
+const handleAccidentalChord = (accidental, letter) => {
+  if (accidental === 'b') {
+    letter = flatten(letter);
+  } else if (accidental === '#') {
+    letter = sharpen(letter);
+  }
+  return letter;
+}
+const flatten = note => note.split('').includes('#') ? note[0] : note + 'b';
+const sharpen = note => note.split('').includes('b') ? note[0] : note + '#';
+
 export const legalSignatures = ['#1','#2','#3','#4','#5','#6','#7','b1','b2','b3','b4','b5','b6','b7'];
 export const letters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ];
 export const notePositions = {
