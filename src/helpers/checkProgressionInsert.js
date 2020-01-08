@@ -9,35 +9,29 @@ export default progression => {
   }
 };
 
-const checkChord = chord => {
+export const checkChord = chord => {
   if (chord.split('').includes('/')) {
     let right = chord.split('/')[1];
     let left = chord.split('/')[0];
+
     if (right.length > 2) {
-      throw new Error(`Too long on right side: ${chord}`);
+      throw new Error(`Target chord should not have a quality (Ex: 5d7/5 is correct -- 5d7/5d7 is incorrect): ${chord}`);
     } else {
       checkChord(right + 'j');
       checkChord(left);
     }
   } else {
-    if (isNaN(parseInt(chord[0]))) {
-      let isClear = 
-        ['b', '#'].includes(chord[0]) // is legal accidental
-        && !isNaN(parseInt(chord[1])) // second part is number
-        && parseInt(chord[1]) < 8 && parseInt(chord[1]) > 0 // second part is 1-7
-        && Object.keys(chordType).includes(chord.slice(2)) // third part is legal type
-      if (!isClear) throw new Error(`nah: ${chord}`);
-    } else {
-      let isClear = 
-        !isNaN(parseInt(chord[0])) // second part is number
-        && parseInt(chord[0]) < 8 && parseInt(chord[0]) > 0 // second part is 1-7
-        && Object.keys(chordType).includes(chord.slice(1)) // third part is legal type
-      if (!isClear) throw new Error(`nah: ${chord}`);
-    }
+    let accidentalDisplacement = isNaN(parseInt(chord[0])) ? 1 : 0;
+    let isClear = 
+      (accidentalDisplacement === 0 || ['b', '#'].includes(chord[0])) // check accidental if present
+      && !isNaN(parseInt(chord[accidentalDisplacement])) // second part is number
+      && parseInt(chord[accidentalDisplacement]) < 8 && parseInt(chord[accidentalDisplacement]) > 0 // second part is 1-7
+      && Object.keys(chordType).includes(chord.slice(1 + accidentalDisplacement)) // third part is legal type
+    if (!isClear) throw new Error(`Illegal chord format: ${chord}`);
   }
-}
+};
 
 const checkRhythm = rhythm => {
   // TODO
   return;
-}
+};
