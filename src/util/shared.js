@@ -11,6 +11,7 @@ export const chordType = {
   "d7": "7"
 };
 export const parseChord = (chord, scale) => {
+  // TODO test this (double flats and double sharps suck)
   let elements = chord.split('');
 
   if (elements.includes('/')) {

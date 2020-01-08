@@ -1,6 +1,7 @@
 import mapProgression from '../helpers/mapProgression';
 import getRelative from '../helpers/getRelative';
 import directAccessClient from '../db/util/directAccessClient';
+import checkProgressionInsert from '../helpers/checkProgressionInsert';
 
 // TODO: Break up this file into smaller files
 
@@ -51,19 +52,21 @@ export default {
       mode,
       progression
     } = input;
-    let prog = JSON.stringify(progression);
-    let insert = await directAccessClient(`
-      INSERT INTO songs (title, author, keySignature, timeSignature, root, mode, progression)
-      VALUES (?, ?, ?, ?, ?, ?, ?);
-    `, [title, author, keySignature, timeSignature, root, mode, prog]);
+    checkProgressionInsert(progression);
+    return { success: false };
+    // let prog = JSON.stringify(progression);
+    // let insert = await directAccessClient(`
+    //   INSERT INTO songs (title, author, keySignature, timeSignature, root, mode, progression)
+    //   VALUES (?, ?, ?, ?, ?, ?, ?);
+    // `, [title, author, keySignature, timeSignature, root, mode, prog]);
 
-    if (insert.insertId)
-      return { success: true }
-    else
-      return {
-        success: false,
-        message: insert.message
-      }
+    // if (insert.insertId)
+    //   return { success: true }
+    // else
+    //   return {
+    //     success: false,
+    //     message: insert.message
+    //   }
   }
 }
 
