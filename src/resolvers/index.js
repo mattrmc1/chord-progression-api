@@ -53,20 +53,19 @@ export default {
       progression
     } = input;
     checkProgressionInsert(progression);
-    return { success: false };
-    // let prog = JSON.stringify(progression);
-    // let insert = await directAccessClient(`
-    //   INSERT INTO songs (title, author, keySignature, timeSignature, root, mode, progression)
-    //   VALUES (?, ?, ?, ?, ?, ?, ?);
-    // `, [title, author, keySignature, timeSignature, root, mode, prog]);
+    let prog = JSON.stringify(progression);
+    let insert = await directAccessClient(`
+      INSERT INTO songs (title, author, keySignature, timeSignature, root, mode, progression)
+      VALUES (?, ?, ?, ?, ?, ?, ?);
+    `, [title, author, keySignature, timeSignature, root, mode, prog]);
 
-    // if (insert.insertId)
-    //   return { success: true }
-    // else
-    //   return {
-    //     success: false,
-    //     message: insert.message
-    //   }
+    if (insert.insertId)
+      return { success: true }
+    else
+      return {
+        success: false,
+        message: insert.message
+      }
   }
 }
 

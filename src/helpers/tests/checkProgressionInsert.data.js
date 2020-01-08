@@ -223,6 +223,13 @@ export const chordInsertPass = [
   '5d7/5',
   '6d7/6',
   '7d7/7',
+  'b1d7/1',
+  '#2d7/2',
+  'b3d7/3',
+  'b4d7/b4',
+  'b5d7/b5',
+  'b6d7/#6',
+  '7d7/7'
 ];
 
 export const chordInsertFail = [
@@ -234,5 +241,6 @@ export const chordInsertFail = [
   '/',
   '57',
   '1',
-  '5/5'
+  '5/5',
+  '5d7/b7j'
 ];
